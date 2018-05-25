@@ -70,6 +70,7 @@ class VentaController extends Controller
     public function store(VentaFormRequest $request){
       	//Tracsacciones
       	//para combrobar si se almacena en ambas tablas, si hay algun problema en alguna da un roolback
+       // dd($request);
     	try{
     		DB::beginTransaction();
     		$venta=new Venta;
@@ -106,8 +107,9 @@ class VentaController extends Controller
     	}catch(\Exeption $e){
     		DB::rollback();
     	}
+        $vuelto= $request->total_venta - $request->venta;
 
-    	return Redirect::to('ventas/venta');
+    	return Redirect::to('ventas/venta/create')->with('status', $vuelto);
     }
 
     public function show($id){

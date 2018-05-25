@@ -24,6 +24,8 @@ Route::resource('ventas/venta','VentaController');
 Route::resource('seguridad/usuario','UsuarioController');
 
 
+
+
 Route::auth();
 
 Route::get('/home', 'HomeController@index');

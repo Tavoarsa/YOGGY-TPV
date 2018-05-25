@@ -35,9 +35,9 @@
     		<div class="panel-body">    			
     			
     			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                @if($detalles=null)
+                @if($detalles==null){
                  <h1>000</h1>
-                @else
+                }@else{
     				<table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
     					<thead style="background-color:#A9D0F5">  			
     						

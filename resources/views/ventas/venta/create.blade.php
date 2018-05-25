@@ -12,6 +12,12 @@
 				</ul>
 			</div>
 			@endif
+
+            @if (session('status'))
+    <div class="alert alert-success">
+       <h3> EL vuelto es: {{ session('status') }}</h3> 
+    </div>
+@endif
 		</div>
 	</div>
 
@@ -119,18 +125,128 @@
     						
     					</tbody>
     				</table>
-    			</div>    
-
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="guardar">
+            <div class="form-group">
+                
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalpago">Pagar</button>
+                
+            </div>      
+        </div>  
+    			</div>   
     		</div>
-    		
-    	</div>
-    	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="guardar">
-    		<div class="form-group">
-    			<input name="_token" value="{{ csrf_token()}}" type="hidden"></input>
-            	<button class="btn btn-primary" type="submit">Pagar</button>
-            	<button  id="btn_cancelar" class="btn btn-danger" type="reset">Cancelar</button>
-            </div>    	
-    	</div>   	
+
+
+                <!-- Modal -->
+            <div class="modal fade" id="modalpago" tabindex="-1" role="dialog" aria-labelledby="modalpago" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Metodo de Pago</h5>
+                        <div class="panel-heading display-table" >                                       
+                </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    <div class="modal-body">
+              <div class="row">
+                  <div class="col-xs-6">
+                      <div class="well">
+                         
+                              <div class="panel-heading display-table" >
+                                    <div class="row display-tr" >
+                                        <h3 class="panel-title display-td" >Pago con tarjeta</h3>
+                                        <div class="display-td" >                            
+                                            <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+                                        </div>
+                                    </div>                    
+                             </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="baucher">Baucher</label>
+                                            <div class="input-group">
+                                                <input 
+                                            type="tel"
+                                            class="form-control"
+                                            name="baucher"
+                                            placeholder="Baucher"
+                                            autocomplete="cc-number"
+                                            autofocus 
+                                        />
+                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                    </div>
+                                </div>                            
+                             </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="monto">Monto</label>
+                                            <div class="input-group">
+                                          <input type="number"  name="monto" value="0" id="monto" class="form-control" placeholder="Monto">
+                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                    </div>
+                                </div>                            
+                             </div>
+                            </div>
+
+                           
+                        
+                      </div>
+                  </div>
+                  <div class="col-xs-6">
+
+                   
+                              <div class="panel-heading display-table" >
+                                    <div class="row display-tr" >
+                                        <h3 class="panel-title display-td" >Efectivo</h3>
+                                        <div class="display-td" >                            
+                                            
+                                        </div>
+                                    </div>                    
+                             </div>
+                          <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="denominacion">Denominación</label>
+                                            <div class="input-group">
+                                                <input  type="number" id="denominacion"  class="form-control"  name="denominacion"   placeholder="Denominación"  autocomplete="cc-number" autofocus/>
+                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+      
+                                    </div>
+                                </div>                            
+                             </div>
+                            </div>
+                            <button id="btn1">Set Vuelto</button>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="vuelto">Vuelto</label>
+                                            <div class="input-group">
+                                             <input  type="number" id="vuelto"  class="form-control"  name="vuelto"   placeholder="Vuelto"  autocomplete="cc-number" autofocus/>
+                                                                                  
+                                                <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                                            </div>
+                                    </div>                            
+                                </div>
+                            </div>
+
+                  </div>
+              </div>
+          </div>
+                      <div class="modal-footer">
+                       <div class="form-group">
+                <input name="_token" value="{{ csrf_token()}}" type="hidden"></input>
+                <button  class="btn btn-primary" type="submit">Pagar</button>
+                <button  id="btn_cancelar" class="btn btn-danger" type="reset">Cancelar</button>
+            </div> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    	 	
     </div>              
         {!!Form::close()!!}
  @push('scripts')
@@ -138,9 +254,16 @@
  <script>
 
  $(document).ready(function(){
+
     $('#bt_add').click(function(){
     agregar();
     });
+
+    $('#btn1').click(function(){
+    vuelto();
+    });
+
+
     
   });
 
@@ -215,6 +338,14 @@
     $("#total_venta").val(total);     
     $("#fila" + index).remove();
     evaluar();
+ }
+ function vuelto(){
+    var denominacion=document.getElementById("denominacion").value;
+    var total_venta= document.getElementById("total_venta").value;
+
+    var vuelto= parseFloat(denominacion) - parseFloat(total_venta);
+    $("#vuelto").html("₡dd/. " + vuelto);
+    console.log(vuelto);
  }
 
 </script>
