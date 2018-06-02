@@ -70,7 +70,7 @@ class VentaController extends Controller
     public function store(VentaFormRequest $request){
       	//Tracsacciones
       	//para combrobar si se almacena en ambas tablas, si hay algun problema en alguna da un roolback
-       // dd($request);
+       // dd($request);      
     	try{
     		DB::beginTransaction();
     		$venta=new Venta;
@@ -107,8 +107,14 @@ class VentaController extends Controller
     	}catch(\Exeption $e){
     		DB::rollback();
     	}
-        $vuelto= $request->total_venta - $request->venta;
+        if($request->denominacion< $request->total_venta ){
 
+            dd("Saldo insuficiente");
+        }else{
+        $total_efectivo=$request->total_venta - $request->monto;        
+        $vuelto=$request->denominacion-$total_efectivo ;
+          
+        }
     	return Redirect::to('ventas/venta/create')->with('status', $vuelto);
     }
 

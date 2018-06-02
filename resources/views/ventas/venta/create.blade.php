@@ -14,8 +14,9 @@
 			@endif
 
             @if (session('status'))
+        
     <div class="alert alert-success">
-       <h3> EL vuelto es: {{ session('status') }}</h3> 
+       <h3> El vuelto es: {{ session('status') }}</h3> 
     </div>
 @endif
 		</div>
@@ -217,21 +218,7 @@
                                     </div>
                                 </div>                            
                              </div>
-                            </div>
-                            <button id="btn1">Set Vuelto</button>
-
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label for="vuelto">Vuelto</label>
-                                            <div class="input-group">
-                                             <input  type="number" id="vuelto"  class="form-control"  name="vuelto"   placeholder="Vuelto"  autocomplete="cc-number" autofocus/>
-                                                                                  
-                                                <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                            </div>
-                                    </div>                            
-                                </div>
-                            </div>
+                            </div>                           
 
                   </div>
               </div>
