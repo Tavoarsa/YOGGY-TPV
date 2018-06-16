@@ -12,18 +12,11 @@
 				</ul>
 			</div>
 			@endif
-
-            @if (session('status'))
-        
-    <div class="alert alert-success">
-       <h3> El vuelto es: {{ session('status') }}</h3> 
-    </div>
-@endif
 		</div>
 	</div>
 
-			{!!Form::open(array('url'=>'ventas/venta','method'=>'POST','autocomplete'=>'off'))!!}
-            {{Form::token()}}
+	{!!Form::open(array('url'=>'ventas/venta','method'=>'POST','autocomplete'=>'off', 'id'=>'formVenta'))!!}
+    {{Form::token()}}
     <div class="row">
     	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     		<div class="form-group">
@@ -127,23 +120,24 @@
     					</tbody>
     				</table>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="guardar">
-            <div class="form-group">
-                
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalpago">Pagar</button>
-                
-            </div>      
-        </div>  
+                        <div class="form-group">                
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalpago">Pagar</button>                
+                        </div>  
+                    </div>  
     			</div>   
     		</div>
 
+        </div>
+   </div>
 
                 <!-- Modal -->
             <div class="modal fade" id="modalpago" tabindex="-1" role="dialog" aria-labelledby="modalpago" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Metodo de Pago</h5>
-                        <div class="panel-heading display-table" >                                       
+                       
+                <div class="panel-heading display-table" >
+                <h1 id="total_pagar">Total a pagar: </h1>                                       
                 </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
@@ -153,6 +147,7 @@
               <div class="row">
                   <div class="col-xs-6">
                       <div class="well">
+                       <h5 class="modal-title" id="exampleModalLabel">Metodo de Pago</h5>
                          
                               <div class="panel-heading display-table" >
                                     <div class="row display-tr" >
@@ -185,7 +180,7 @@
                                     <div class="form-group">
                                         <label for="monto">Monto</label>
                                             <div class="input-group">
-                                          <input type="number"  name="monto" value="0" id="monto" class="form-control" placeholder="Monto">
+                                          <input type="number"  name="monto" required value="" id="monto" class="form-control" placeholder="Monto">
                                         <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                     </div>
                                 </div>                            
@@ -197,7 +192,6 @@
                       </div>
                   </div>
                   <div class="col-xs-6">
-
                    
                               <div class="panel-heading display-table" >
                                     <div class="row display-tr" >
@@ -212,7 +206,7 @@
                                     <div class="form-group">
                                         <label for="denominacion">Denominación</label>
                                             <div class="input-group">
-                                                <input  type="number" id="denominacion"  class="form-control"  name="denominacion"   placeholder="Denominación"  autocomplete="cc-number" autofocus/>
+                                                <input  type="number" id="denominacion" required value="0"  class="form-control"  name="denominacion"   placeholder="Denominación"  autocomplete="cc-number" autofocus/>
                                         <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
       
                                     </div>
@@ -223,35 +217,39 @@
                   </div>
               </div>
           </div>
+
+            
+
+
+
+
+
+
+
                       <div class="modal-footer">
                        <div class="form-group">
                 <input name="_token" value="{{ csrf_token()}}" type="hidden"></input>
-                <button  class="btn btn-primary" type="submit">Pagar</button>
+                <button  class="btn btn-primary" id="btn_pagar"  type="submit">Pagar</button>
                 <button  id="btn_cancelar" class="btn btn-danger" type="reset">Cancelar</button>
             </div> 
                       </div>
                     </div>
                   </div>
-                </div>
-    	 	
-    </div>              
-        {!!Form::close()!!}
- @push('scripts')
+                </div>  
+    {!!Form::close()!!}
 
- <script>
+
+ @push('scripts')
+ <script>    
 
  $(document).ready(function(){
 
     $('#bt_add').click(function(){
     agregar();
     });
-
-    $('#btn1').click(function(){
-    vuelto();
-    });
-
-
-    
+    $('#btn_pagar').click(function(){
+    validate_pago();
+    });      
   });
 
  var cont=0;
@@ -275,6 +273,7 @@
     cantidad=$("#pcantidad").val();
     descuento=$("#pdescuento").val();
     precio_venta=$("#pprecio_venta").val();
+    
     stock=$("#pstock").val();
 
     if (idarticulo!="" && cantidad!="" && cantidad>0 && descuento!="" && precio_venta!="")
@@ -282,13 +281,15 @@
         if(Number(stock)>=Number(cantidad)) {
  
             subtotal[cont]=(cantidad*precio_venta-descuento);
-            total=total+subtotal[cont];
+            total=total+subtotal[cont];           
 
             var fila='<tr class="selected" id="fila'+cont+'"><td><button type="button" class="btn btn-warning" onclick="eliminar('+cont+');">X</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="number" name="cantidad[]" value="'+cantidad+'"></td><td><input type="number" name="precio_venta[]" value="'+precio_venta+'"></td><td><input type="number" name="descuento[]" value="'+descuento+'"></td><td>'+subtotal[cont]+'</td></tr>';
             cont++;
             limpiar();
             $('#total').html("₡/ " + total);
+            $('#total_pagar').html("Total a pagar: ₡/ " + total);
             $('#total_venta').val(total);
+           
             evaluar();
             $('#detalles').append(fila);
         }else{
@@ -303,22 +304,18 @@
 
  function limpiar(){
     $("#pcantidad").val("");
-    $("#pdescuento").val("");
+    $("#pdescuento").val("0");
     $("#pprecio_venta").val("");
   }
 
-  function evaluar()
-  {
-    if (total>0)
-    {
+  function evaluar()  {
+    if (total>0)    {
       $("#guardar").show();
     }
-    else
-    {
+    else    {
       $("#guardar").hide(); 
     }
    }
-
  function eliminar(index){
   total=total-subtotal[index]; 
     $("#total").html("₡/. " + total);
@@ -326,16 +323,28 @@
     $("#fila" + index).remove();
     evaluar();
  }
- function vuelto(){
-    var denominacion=document.getElementById("denominacion").value;
-    var total_venta= document.getElementById("total_venta").value;
+ function validate_pago(){
+    efectivo=$("#denominacion").val();
+    tarjeta=$("#monto").val();
+    total_pagar=$("#total_venta").val();
 
-    var vuelto= parseFloat(denominacion) - parseFloat(total_venta);
-    $("#vuelto").html("₡dd/. " + vuelto);
-    console.log(vuelto);
+    if(tarjeta!="" || efectivo!=""){
+
+        total_pagar=total_pagar-tarjeta;
+        if(efectivo<total_pagar){
+            alert("Forma de pago insufciente");
+        }else{
+
+            vuelto=efectivo-total_pagar;
+            alert("Vuelto: " +vuelto);
+        }  
+       
+    }else{
+         alert("Debes de elegir una forma de pago");
+
+    }  
  }
-
 </script>
-
  @endpush	
+
 @endsection

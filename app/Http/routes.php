@@ -22,6 +22,14 @@ Route::resource('compras/proveedor','ProveedorController');
 Route::resource('compras/ingreso','IngresoController');
 Route::resource('ventas/venta','VentaController');
 Route::resource('seguridad/usuario','UsuarioController');
+Route::resource('reporte/porlinea','ReporteController');
+Route::get('reporte/porlinea/pdf/{id}','ReporteController@ventas_linea_pdf');
+Route::get('reporte/ventas_totales','ReporteController@show_ventasT');
+Route::get('reporte/ventas_totales/pdf','ReporteController@ventas_totales_pdf');
+
+Route::resource('reporte/dinero','ReporteController@rep_dinero');
+
+
 
 
 

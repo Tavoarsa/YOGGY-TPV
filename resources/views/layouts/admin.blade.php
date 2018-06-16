@@ -19,9 +19,13 @@
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
     <link rel="apple-touch-icon" href="{{asset('img/apple-touch-icon.png')}}">
     <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}">
-
+    <!-- Print hmtl printjs -->
+    <link rel="stylesheet" href="{{asset('css/print.min.css')}}">
   </head>
   <body class="hold-transition skin-blue sidebar-mini">
+  @if(\Session::has('message'))
+        @include('partials.message')
+ @endif
     <div class="wrapper">
 
       <header class="main-header">
@@ -131,6 +135,34 @@
                 
               </ul>
             </li>
+             <li class="treeview">
+              <a href="#">
+                <i class="fa fa-file"></i> <span>Reporte</span>                
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href=""><i class="fa fa-circle-o"></i>Reporte General</a></li>                
+              </ul>
+              <ul class="treeview-menu">
+                <li><a href=""><i class="fa fa-circle-o"></i>Linea por Linea</a></li>                
+              </ul>
+
+              <ul class="treeview-menu">
+                <li><a href=""><i class="fa fa-circle-o"></i>Ventas Totales</a></li>                
+              </ul>
+
+              <ul class="treeview-menu">
+                <li><a href=""><i class="fa fa-circle-o"></i>Intervalos de Fecha</a></li>                
+              </ul>
+
+              <ul class="treeview-menu">
+                <li><a href=""><i class="fa fa-circle-o"></i>Vnetas en Efectivo</a></li>                
+              </ul>
+
+              <ul class="treeview-menu">
+                <li><a href=""><i class="fa fa-circle-o"></i>Ventas en Tarjetas</a></li>                
+              </ul>
+            </li>
              <li>
               <a href="#">
                 <i class="fa fa-plus-square"></i> <span>Ayuda</span>
@@ -208,6 +240,8 @@
     <script src="{{asset('js/bootstrap-select.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('js/app.min.js')}}"></script>
-    
+     <!--<!-- Print hmtl printjs -->-->
+     <script src="{{asset('js/print.min.js')}}"></script>
+     
   </body>
 </html>
