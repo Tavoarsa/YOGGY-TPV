@@ -14,20 +14,103 @@
 			@endif
 		</div>
 	</div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title" id="exampleModalLongTitle">Agregar Cliente</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        
+                         @if (count($errors)>0)
+                        <div class="alert alert-danger">
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                        </ul>
+                        </div>
+                    @endif
+                </div>
+                </div>
+              </div>
+              <div class="modal-body">
+                {!!Form::open(array('url'=>'ventas/cliente','method'=>'POST','autocomplete'=>'off'))!!}
+            {{Form::token()}}
+            <input type="text" hidden="true" name="cliente_venta" id="cliente_venta">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" required value="{{old('nombre')}}" class="form-control" placeholder="Nombre...">
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="direccion">Dirección</label>
+                <input type="text" name="direccion"  value="{{old('nombre')}}" class="form-control" placeholder="Dirección...">
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="tipo_documento">Documento</label>
+                <select name="tipo_documento" class="form-control">
+                    <option value="DNI">DNI</option>
+                    <option value="RUC">RUC</option>
+                    <option value="PAS">PAS</option>
+                </select>
+            </div>      
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="num_documento">Número docuemento</label>
+                <input type="text" name="num_documento" required value="{{old('num_documento')}}" class="form-control" placeholder="Número docuemnto...">
+            </div>      
+        </div>      
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="text" name="telefono"  value="{{old('telefono')}}" class="form-control" placeholder="Teléfono...">
+            </div>      
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email"  value="{{old('email')}}" class="form-control" placeholder="Email...">
+            </div>      
+        </div>       
+               
+    </div>             
+       
+              </div>
+              <div class="modal-footer">
+                <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </div>
+               {!!Form::close()!!} 
+            </div>
+          </div>
+        </div>
 
 	{!!Form::open(array('url'=>'ventas/venta','method'=>'POST','autocomplete'=>'off', 'id'=>'formVenta'))!!}
     {{Form::token()}}
     <div class="row">
     	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     		<div class="form-group">
-	    		<label for="proveedor">Cliente</label>
+	    		<h4>Cliente <span class="label label-default"><button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal">Nuevo</button></span></h4>
 	            <select name="idcliente"  id="idcliente" class="form-control selectpicker"data-live-search="true">
 	            	@foreach($personas as $persona)
 	            	<option value="{{$persona->idpersona}}">{{$persona->nombre}}</option>
 	            	@endforeach	            	
 	            </select>
             </div>
-    	</div>	
+    	</div>
+        
 
     	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 	    	<div class="form-group">
@@ -100,7 +183,7 @@
     			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     				<table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
     					<thead style="background-color:#A9D0F5">    					
-    						<th>Opciones</th>
+    						<th>Opciones</th>                           
     						<th>Artículo</th>
     						<th>Cantidad</th>    						
     						<th>Precio Venta</th>
@@ -109,10 +192,10 @@
     					</thead>
     					<tfoot>
     						<th>TOTAL</th>
-    						<th></th>
-    						<th></th>
-    						<th></th>
-    						<th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>   
     						<th><h4 id="total">₡/. 0.00</h4><input type="hidden" name="total_venta" id="total_venta"></th>     						
     					</tfoot>
     					<tbody>
@@ -180,7 +263,7 @@
                                     <div class="form-group">
                                         <label for="monto">Monto</label>
                                             <div class="input-group">
-                                          <input type="number"  name="monto" required value="" id="monto" class="form-control" placeholder="Monto">
+                                          <input type="number"  name="monto" required value="0" id="monto" class="form-control" placeholder="Monto">
                                         <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                     </div>
                                 </div>                            
@@ -243,6 +326,9 @@
  <script>    
 
  $(document).ready(function(){
+    $('#recalcular_totales').click(function(){
+    recalcular_totales();
+    });
 
     $('#bt_add').click(function(){
     agregar();
@@ -257,6 +343,8 @@
  subtotal=[];
  $("#guardar").hide();
  $("#pidarticulo").change(mostrarValores);
+
+
 
  function mostrarValores(){
 
@@ -306,6 +394,7 @@
     $("#pcantidad").val("");
     $("#pdescuento").val("0");
     $("#pprecio_venta").val("");
+   
   }
 
   function evaluar()  {

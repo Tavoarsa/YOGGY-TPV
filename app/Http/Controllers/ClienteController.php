@@ -47,7 +47,14 @@ class ClienteController extends Controller
     	$persona->telefono=$request->get('telefono');
     	$persona->email=$request->get('email');    	
     	$persona->save();
-    	return Redirect::to('ventas/cliente');//listado de todas las cliente
+
+        if ($request->cliente_venta===""){
+            return back();
+        }else{
+            return Redirect::to('ventas/cliente');//listado de todas las cliente
+
+        }
+    	
     }
     public function show($id){
 
